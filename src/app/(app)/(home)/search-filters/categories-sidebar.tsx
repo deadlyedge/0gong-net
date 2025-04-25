@@ -1,33 +1,37 @@
+import { useRouter } from "next/navigation"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { useTRPC } from "@/trpc/client"
+import { useState } from "react"
+
 import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet"
-import type { CustomCategory } from "../types"
-import { useState } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
+
+import type { CategoriesGetManyOutput } from "@/modules/categories/types"
 
 type CategoriesSidebarProps = {
 	open: boolean
 	onOpenChange: (open: boolean) => void
-	data: CustomCategory[] // TODO: remove this later
 }
 
 export const CategoriesSidebar = ({
 	open,
 	onOpenChange,
-	data,
 }: CategoriesSidebarProps) => {
 	const router = useRouter()
+	const trpc = useTRPC()
+	const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions())
 
-	const [parentCategories, setParentCategories] = useState<
-		CustomCategory[] | null
+	const [parentCategories, setParentCategories] =
+		useState<CategoriesGetManyOutput | null>(null)
+	const [selectedCategory, setSelectedCategory] = useState<
+		CategoriesGetManyOutput[0] | null
 	>(null)
-	const [selectedCategory, setSelectedCategory] =
-		useState<CustomCategory | null>(null)
 
 	// if we have parent categories, show those, otherwise show root categories
 	const currentCategories = parentCategories ?? data ?? []
@@ -38,9 +42,9 @@ export const CategoriesSidebar = ({
 		onOpenChange(open)
 	}
 
-	const handleCategoryClick = (category: CustomCategory) => {
+	const handleCategoryClick = (category: CategoriesGetManyOutput[0]) => {
 		if (category.subcategories && category.subcategories.length > 0) {
-			setParentCategories(category.subcategories as CustomCategory[])
+			setParentCategories(category.subcategories as CategoriesGetManyOutput)
 			setSelectedCategory(category)
 		} else {
 			// this is a leaf category (no subcategories)
