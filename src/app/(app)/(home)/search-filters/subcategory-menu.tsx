@@ -1,9 +1,9 @@
 import type { Category } from "@/payload-types"
 import Link from "next/link"
-import type { CustomCategory } from "../types"
+import type { CategoriesGetManyOutput } from "@/modules/categories/types"
 
 type SubcategoryMenuProps = {
-	category: CustomCategory
+	category: CategoriesGetManyOutput[0]
 	isOpen: boolean
 	position: { top: number; left: number }
 }

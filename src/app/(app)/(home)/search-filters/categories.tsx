@@ -5,12 +5,12 @@ import { useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { ListFilterIcon } from "lucide-react"
 
-import type { CustomCategory } from "../types"
 import { CategoryDropdown } from "./category-dropdown"
 import { Button } from "@/components/ui/button"
 import { CategoriesSidebar } from "./categories-sidebar"
+import type { CategoriesGetManyOutput } from "@/modules/categories/types"
 
-type CategoriesProps = { data: CustomCategory[] }
+type CategoriesProps = { data: CategoriesGetManyOutput }
 
 export const Categories = ({ data }: CategoriesProps) => {
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -54,17 +54,17 @@ export const Categories = ({ data }: CategoriesProps) => {
 		}
 
 		const resizeObserver = new ResizeObserver(calculateVisible)
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		resizeObserver.observe(containerRef.current!)
 
 		return () => resizeObserver.disconnect()
-	}, [data.length])
+	}, [])
 
 	return (
 		<div className="relative w-full">
 			<CategoriesSidebar
 				open={isSidebarOpen}
 				onOpenChange={setIsSidebarOpen}
-				data={data}
 			/>
 
 			{/* hidden div to measure all items */}
