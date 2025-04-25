@@ -37,10 +37,10 @@ export const CategoryDropdown = ({
 	const dropdownPosition = getDropdownPosition()
 
 	// TODO: potentially improve mobile
-	const toggleDropdown = () => {
-		if (!category.subcategories) return
-		setIsOpen(!isOpen)
-	}
+	// const toggleDropdown = () => {
+	// 	if (!category.subcategories) return
+	// 	setIsOpen(!isOpen)
+	// }
 
 	return (
 		<div
@@ -48,7 +48,8 @@ export const CategoryDropdown = ({
 			ref={dropdownRef}
 			onMouseEnter={onMouseEnter}
 			onMouseLeave={onMouseLeave}
-			onClick={toggleDropdown}>
+			// onClick={toggleDropdown}
+		>
 			<div className="relative">
 				<Button
 					variant="elevated"
@@ -60,7 +61,8 @@ export const CategoryDropdown = ({
 					)}>
 					<Link
 						// prefetch
-						href={`/${category.slug === "all" ? "" : category.slug}`}>
+						href={`/${category.slug === "all" ? "" : category.slug}`}
+					>
 						{category.name}
 					</Link>
 				</Button>
