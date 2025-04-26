@@ -83,20 +83,24 @@ export const CategoriesSidebar = ({
 				</SheetHeader>
 				<ScrollArea className="flex flex-col overflow-y-auto h-full pb-2">
 					{parentCategories && (
+						// biome-ignore lint/a11y/useButtonType: <explanation>
 						<button
 							onClick={handleBackClick}
-							className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium cursor-pointer">
+							className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium cursor-pointer"
+						>
 							<ChevronLeftIcon className="size-4 mr-2" />
 							Back
 						</button>
 					)}
 					{currentCategories.map((category) => (
+						// biome-ignore lint/a11y/useButtonType: <explanation>
 						<button
 							key={category.slug}
 							onClick={() => {
 								handleCategoryClick(category)
 							}}
-							className="w-full text-left p-4 hover:bg-black hover:text-white flex justify-between items-center text-base font-medium cursor-pointer">
+							className="w-full text-left p-4 hover:bg-black hover:text-white flex justify-between items-center text-base font-medium cursor-pointer"
+						>
 							{category.name}
 							{category.subcategories && category.subcategories.length > 0 && (
 								<ChevronRightIcon className="size-4" />
