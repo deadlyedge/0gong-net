@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { MenuIcon } from "lucide-react"
-import { NavbarSidebar } from "./navbar-sidebar"
+import { NavbarSidebar } from "@/modules/home/ui/components/navbar-sidebar"
 
 const poppins = Poppins({
 	subsets: ["latin"],

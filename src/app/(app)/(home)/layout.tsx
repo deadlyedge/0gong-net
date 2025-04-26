@@ -1,9 +1,13 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import { getQueryClient, trpc } from "@/trpc/server"
-import { Footer } from "./footer"
-import { Navbar } from "./navbar"
-import { SearchFilters, SearchFiltersLoading } from "./search-filters"
 import { Suspense } from "react"
+
+import { Navbar } from "@/modules/home/ui/components/navbar"
+import { Footer } from "@/modules/home/ui/components/footer"
+import {
+	SearchFilters,
+	SearchFiltersSkeleton,
+} from "@/modules/home/ui/components/search-filters"
 
 type LayoutProps = {
 	children: React.ReactNode
@@ -16,7 +20,7 @@ const Layout = async ({ children }: LayoutProps) => {
 		<div className="flex flex-col min-h-screen">
 			<Navbar />
 			<HydrationBoundary state={dehydrate(queryClient)}>
-				<Suspense fallback={<SearchFiltersLoading />}>
+				<Suspense fallback={<SearchFiltersSkeleton />}>
 					<SearchFilters />
 				</Suspense>
 			</HydrationBoundary>
