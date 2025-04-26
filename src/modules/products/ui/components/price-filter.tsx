@@ -1,8 +1,9 @@
 "use client"
 
+import type { ChangeEvent } from "react"
+
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ChangeEvent } from "react"
 
 type PriceFilterProps = {
 	minPrice?: string | null
