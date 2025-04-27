@@ -5,7 +5,6 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
-import { useDropdownPosition } from "./use-dropdown-position"
 import { SubcategoryMenu } from "./subcategory-menu"
 import type { CategoriesGetManyOutput } from "@/modules/categories/types"
 
@@ -22,7 +21,6 @@ export const CategoryDropdown = ({
 }: CategoryDropdownProps) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const dropdownRef = useRef<HTMLDivElement>(null)
-	const { getDropdownPosition } = useDropdownPosition(dropdownRef)
 
 	const onMouseEnter = () => {
 		if (category.subcategories) {
@@ -33,8 +31,6 @@ export const CategoryDropdown = ({
 	const onMouseLeave = () => {
 		setIsOpen(false)
 	}
-
-	const dropdownPosition = getDropdownPosition()
 
 	// TODO: potentially improve mobile
 	// const toggleDropdown = () => {
@@ -47,9 +43,7 @@ export const CategoryDropdown = ({
 			className="relative"
 			ref={dropdownRef}
 			onMouseEnter={onMouseEnter}
-			onMouseLeave={onMouseLeave}
-			// onClick={toggleDropdown}
-		>
+			onMouseLeave={onMouseLeave}>
 			<div className="relative">
 				<Button
 					variant="elevated"
@@ -76,11 +70,7 @@ export const CategoryDropdown = ({
 				)}
 			</div>
 
-			<SubcategoryMenu
-				category={category}
-				isOpen={isOpen}
-				position={dropdownPosition}
-			/>
+			<SubcategoryMenu category={category} isOpen={isOpen} />
 		</div>
 	)
 }

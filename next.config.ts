@@ -4,7 +4,6 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
 	/* config options here */
 	images: {
-		domains: ["f.zick.xyz"],
 		remotePatterns: [
 			{
 				protocol: "https",

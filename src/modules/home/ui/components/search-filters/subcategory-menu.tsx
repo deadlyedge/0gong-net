@@ -5,13 +5,11 @@ import type { CategoriesGetManyOutput } from "@/modules/categories/types"
 type SubcategoryMenuProps = {
 	category: CategoriesGetManyOutput[0]
 	isOpen: boolean
-	position: { top: number; left: number }
 }
 
 export const SubcategoryMenu = ({
 	category,
 	isOpen,
-	position,
 }: SubcategoryMenuProps) => {
 	if (!isOpen || !category.subcategories || category.subcategories.length === 0)
 		return null
@@ -19,9 +17,7 @@ export const SubcategoryMenu = ({
 	const backgroundColor = category.color || "#f5f5f5"
 
 	return (
-		<div
-			className="fixed z-50"
-			style={{ top: position.top, left: position.left }}>
+		<div className="absolute z-50" style={{ top: "100%", left: 0 }}>
 			{/* Invisible bridge to maintain hover */}
 			<div className="h-3 w-60" />
 			<div
