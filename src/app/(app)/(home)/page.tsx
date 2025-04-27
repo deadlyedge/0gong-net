@@ -1,11 +1,31 @@
-"use client"
+import type { SearchParams } from "nuqs"
 
-import { useTRPC } from "@/trpc/client"
-import { useQuery } from "@tanstack/react-query"
+import { getQueryClient, trpc } from "@/trpc/server"
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 
-export default function Home() {
-	const trpc = useTRPC()
-	const { data } = useQuery(trpc.auth.session.queryOptions())
+import { loadProductFilters } from "@/modules/products/search-params"
+import { ProductListView } from "@/modules/products/ui/views/product-list-view"
+import { DEFAULT_LIMIT } from "@/constants"
 
-	return <div className="p-4">Home{JSON.stringify(data?.user, null, 2)}</div>
+type HomeProps = {
+	searchParams: Promise<SearchParams>
 }
+
+const Home = async ({ searchParams }: HomeProps) => {
+	const filters = await loadProductFilters(searchParams)
+
+	const queryClient = getQueryClient()
+	void queryClient.prefetchInfiniteQuery(
+		trpc.products.getMany.infiniteQueryOptions({
+			...filters,
+			limit: DEFAULT_LIMIT,
+		}),
+	)
+	return (
+		<HydrationBoundary state={dehydrate(queryClient)}>
+			<ProductListView />
+		</HydrationBoundary>
+	)
+}
+
+export default Home
