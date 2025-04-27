@@ -13,8 +13,6 @@ type LayoutProps = {
 	children: React.ReactNode
 }
 
-export const dynamic = 'force-dynamic';
-
 const Layout = async ({ children }: LayoutProps) => {
 	const queryClient = getQueryClient()
 	void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions())
