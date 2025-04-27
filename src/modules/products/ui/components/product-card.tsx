@@ -1,15 +1,17 @@
 import { Skeleton } from "@/components/ui/skeleton"
+import { generateTenantUrl } from "@/lib/utils"
 import { StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 type ProductCardProps = {
 	id: string
 	name: string
 	price: number
 	imageUrl?: string | null
-	authorUsername: string
-	authorImageUrl?: string | null
+	tenantSlug: string
+	tenantImageUrl?: string | null
 	reviewRating: number
 	reviewCount: number
 }
@@ -19,11 +21,19 @@ export const ProductCard = ({
 	name,
 	price,
 	imageUrl,
-	authorUsername,
-	authorImageUrl,
+	tenantSlug,
+	tenantImageUrl,
 	reviewRating,
 	reviewCount,
 }: ProductCardProps) => {
+	const router = useRouter()
+
+	const handleTenantClick = (e: React.MouseEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+
+		router.push(generateTenantUrl(tenantSlug))
+	}
 	return (
 		<Link href={`/products/${id}`}>
 			<div className="border rounded-md bg-white overflow-hidden h-full flex flex-col hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow">
@@ -37,17 +47,17 @@ export const ProductCard = ({
 				</div>
 				<div className="p-4 flex flex-col flex-1 border-y gap-3">
 					<h2 className="text-lg font-semibold line-clamp-4">{name}</h2>
-					<div className="flex items-center gap-2" onClick={() => {}}>
-						{authorImageUrl && (
+					<div className="flex items-center gap-2" onClick={handleTenantClick}>
+						{tenantImageUrl && (
 							<Image
-								alt={authorUsername}
-								src={authorImageUrl}
+								alt={tenantSlug}
+								src={tenantImageUrl}
 								width={16}
 								height={16}
 								className="rounded-full border shrink-0 size-[16px]"
 							/>
 						)}
-						<p className="text-sm text-muted-foreground">{authorUsername}</p>
+						<p className="text-sm text-muted-foreground">{tenantSlug}</p>
 					</div>
 					{reviewCount > 0 && (
 						<div className="flex items-center gap-1">
