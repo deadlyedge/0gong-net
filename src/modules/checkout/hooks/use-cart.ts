@@ -8,13 +8,6 @@ export const useCart = (tenantSlug: string) => {
 	const removeProduct = useCartStore((state) => state.removeProduct)
 	const clearCart = useCartStore((state) => state.clearCart)
 	const clearAllCarts = useCartStore((state) => state.clearAllCarts)
-	// const {
-	// 	getCartByTenant,
-	// 	addProduct,
-	// 	removeProduct,
-	// 	clearCart,
-	// 	clearAllCarts,
-	// } = useCartStore()
 
 	const productIds = useCartStore(
 		useShallow((state) => state.tenantCarts[tenantSlug]?.productIds || []),

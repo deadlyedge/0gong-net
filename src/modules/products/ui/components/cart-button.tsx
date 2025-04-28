@@ -9,17 +9,17 @@ type CartButtonProps = {
 }
 
 export const CartButton = ({ tenantSlug, productId }: CartButtonProps) => {
-	const cart = useCart(tenantSlug)
-  
+	const { isProductInCart, toggleProduct } = useCart(tenantSlug)
+
 	return (
 		<Button
 			variant="elevated"
 			className={cn(
 				"flex-1 bg-pink-400",
-				cart.isProductInCart(productId) && "bg-white",
+				isProductInCart(productId) && "bg-white",
 			)}
-			onClick={() => cart.toggleProduct(productId)}>
-			{cart.isProductInCart(productId) ? "Remove from cart" : "Add to cart"}
+			onClick={() => toggleProduct(productId)}>
+			{isProductInCart(productId) ? "Remove from cart" : "Add to cart"}
 		</Button>
 	)
 }

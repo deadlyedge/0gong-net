@@ -23,11 +23,6 @@ type CheckoutViewProps = {
 export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
 	const router = useRouter()
 	const [states, setStates] = useCheckoutStates()
-	// const getCartByTenant = useCartStore((state) => state.getCartByTenant)
-	// const removeProduct = useCartStore((state) => state.removeProduct)
-	// const clearCart = useCartStore((state) => state.clearCart)
-
-	// const productIds = getCartByTenant(tenantSlug)
 	const { productIds, clearCart, removeProduct } = useCart(tenantSlug)
 
 	const trpc = useTRPC()
