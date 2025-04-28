@@ -1,0 +1,150 @@
+import type Stripe from "stripe"
+import { getPayload } from "payload"
+import config from "@/payload.config"
+import { NextResponse } from "next/server"
+
+import { stripe } from "@/lib/stripe"
+import type { ExpandedLineItem } from "@/modules/checkout/types"
+
+export async function POST(req: Request) {
+	let event: Stripe.Event
+
+	try {
+		event = stripe.webhooks.constructEvent(
+			await (await req.blob()).text(),
+			req.headers.get("stripe-signature") as string,
+			process.env.STRIPE_WEBHOOK_SECRET as string,
+		)
+	} catch (error) {
+		const errorMessage =
+			error instanceof Error ? error.message : "Unknown error"
+
+		if (error instanceof Error) console.log(`❌ Error.message: ${errorMessage}`)
+		return NextResponse.json(
+			{ error: `Webhook Error: ${errorMessage}` },
+			{ status: 400 },
+		)
+	}
+	console.log("✅ Success:", event.id)
+
+	const permittedEvents: string[] = [
+		"checkout.session.completed",
+		"charge.updated",
+		"invoice.created",
+		"invoice.finalized",
+		"invoice.sent",
+		"invoice.paid",
+		"invoice.payment_succeeded",
+		"payment_intent.succeeded",
+		"payment_intent.created",
+		"customer.created",
+		"charge.succeeded",
+	]
+
+	const payload = await getPayload({ config })
+
+	if (!permittedEvents.includes(event.type)) {
+		let data: Stripe.Checkout.Session
+
+		try {
+				switch (event.type) {
+					case "checkout.session.completed": {
+						data = event.data.object
+
+						if (!data.metadata?.userId) {
+							throw new Error("No user ID found in metadata")
+						}
+
+						const user = await payload.findByID({
+							collection: "users",
+							id: data.metadata.userId,
+						})
+
+						if (!user) throw new Error("No user found")
+
+						const expandedSession = await stripe.checkout.sessions.retrieve(
+							data.id,
+							{
+								expand: ["line_items.data.price.product"],
+							},
+						)
+
+						console.log("line_items data:", expandedSession.line_items?.data)
+						if (
+							!expandedSession.line_items?.data ||
+							expandedSession.line_items.data.length === 0
+						) {
+							throw new Error("No line items found")
+						}
+
+						const lineItems = expandedSession.line_items
+							.data as ExpandedLineItem[]
+
+						for (const item of lineItems) {
+							console.log("item", item)
+							await payload.create({
+								collection: "orders",
+								data: {
+									stripeCheckoutSessionId: data.id,
+									user: user.id,
+									product: item.price.product.metadata.id,
+									name: item.price.product.name,
+								},
+							})
+						}
+						break
+					}
+					case "charge.updated": {
+						console.log("Info: charge.updated event received")
+						break
+					}
+					case "invoice.created": {
+						console.log("Info: invoice.created event received")
+						break
+					}
+					case "invoice.finalized": {
+						console.log("Info: invoice.finalized event received")
+						break
+					}
+					case "invoice.sent": {
+						console.log("Info: invoice.sent event received")
+						break
+					}
+					case "invoice.paid": {
+						console.log("Info: invoice.paid event received")
+						break
+					}
+					case "invoice.payment_succeeded": {
+						console.log("Info: invoice.payment_succeeded event received")
+						break
+					}
+					case "payment_intent.succeeded": {
+						console.log("Info: payment_intent.succeeded event received")
+						break
+					}
+					case "payment_intent.created": {
+						console.log("Info: payment_intent.created event received")
+						break
+					}
+					case "customer.created": {
+						console.log("Info: customer.created event received")
+						break
+					}
+					case "charge.succeeded": {
+						console.log("Info: charge.succeeded event received")
+						break
+					}
+					default:
+						throw new Error(`Unhandled event: ${event.type}`)
+				}
+		} catch (error) {
+			console.error(error)
+			return NextResponse.json(
+				{ message: "Webhook handler failed" },
+				{ status: 500 },
+			)
+		}
+	}
+
+	return NextResponse.json({ received: true }, { status: 200 })
+}
