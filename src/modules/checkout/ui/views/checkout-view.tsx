@@ -10,10 +10,11 @@ import { InboxIcon, LoaderIcon } from "lucide-react"
 import { useTRPC } from "@/trpc/client"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
-import { useCart } from "../../hooks/use-cart"
+// import { useCartStore } from "../../store/use-cart-store"
 import { CheckoutItem } from "../components/checkout-item"
 import { CheckoutSidebar } from "../components/checkout-sidebar"
 import { useCheckoutStates } from "../../hooks/use-checkout-states"
+import { useCart } from "../../hooks/use-cart"
 
 type CheckoutViewProps = {
 	tenantSlug: string
@@ -22,7 +23,12 @@ type CheckoutViewProps = {
 export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
 	const router = useRouter()
 	const [states, setStates] = useCheckoutStates()
-	const { productIds, removeProduct, clearCart } = useCart(tenantSlug)
+	// const getCartByTenant = useCartStore((state) => state.getCartByTenant)
+	// const removeProduct = useCartStore((state) => state.removeProduct)
+	// const clearCart = useCartStore((state) => state.clearCart)
+
+	// const productIds = getCartByTenant(tenantSlug)
+	const { productIds, clearCart, removeProduct } = useCart(tenantSlug)
 
 	const trpc = useTRPC()
 	const { data, error, isLoading } = useQuery(
@@ -35,6 +41,8 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
 				setStates({ success: false, cancelled: false })
 			},
 			onSuccess: (data) => {
+				setStates({ success: true, cancelled: false })
+				clearCart()
 				window.location.href = data.url
 			},
 			onError: (error) => {
