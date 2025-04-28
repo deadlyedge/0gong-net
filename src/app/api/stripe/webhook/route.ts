@@ -29,21 +29,21 @@ export async function POST(req: Request) {
 
 	const permittedEvents: string[] = [
 		"checkout.session.completed",
-		"charge.updated",
-		"invoice.created",
-		"invoice.finalized",
-		"invoice.sent",
-		"invoice.paid",
-		"invoice.payment_succeeded",
-		"payment_intent.succeeded",
-		"payment_intent.created",
-		"customer.created",
-		"charge.succeeded",
+		// "charge.updated",
+		// "invoice.created",
+		// "invoice.finalized",
+		// "invoice.sent",
+		// "invoice.paid",
+		// "invoice.payment_succeeded",
+		// "payment_intent.succeeded",
+		// "payment_intent.created",
+		// "customer.created",
+		// "charge.succeeded",
 	]
 
 	const payload = await getPayload({ config })
 
-	if (!permittedEvents.includes(event.type)) {
+	if (permittedEvents.includes(event.type)) {
 		let data: Stripe.Checkout.Session
 
 		try {
@@ -69,7 +69,6 @@ export async function POST(req: Request) {
 							},
 						)
 
-						console.log("line_items data:", expandedSession.line_items?.data)
 						if (
 							!expandedSession.line_items?.data ||
 							expandedSession.line_items.data.length === 0
@@ -81,7 +80,6 @@ export async function POST(req: Request) {
 							.data as ExpandedLineItem[]
 
 						for (const item of lineItems) {
-							console.log("item", item)
 							await payload.create({
 								collection: "orders",
 								data: {
@@ -92,46 +90,6 @@ export async function POST(req: Request) {
 								},
 							})
 						}
-						break
-					}
-					case "charge.updated": {
-						console.log("Info: charge.updated event received")
-						break
-					}
-					case "invoice.created": {
-						console.log("Info: invoice.created event received")
-						break
-					}
-					case "invoice.finalized": {
-						console.log("Info: invoice.finalized event received")
-						break
-					}
-					case "invoice.sent": {
-						console.log("Info: invoice.sent event received")
-						break
-					}
-					case "invoice.paid": {
-						console.log("Info: invoice.paid event received")
-						break
-					}
-					case "invoice.payment_succeeded": {
-						console.log("Info: invoice.payment_succeeded event received")
-						break
-					}
-					case "payment_intent.succeeded": {
-						console.log("Info: payment_intent.succeeded event received")
-						break
-					}
-					case "payment_intent.created": {
-						console.log("Info: payment_intent.created event received")
-						break
-					}
-					case "customer.created": {
-						console.log("Info: customer.created event received")
-						break
-					}
-					case "charge.succeeded": {
-						console.log("Info: charge.succeeded event received")
 						break
 					}
 					default:

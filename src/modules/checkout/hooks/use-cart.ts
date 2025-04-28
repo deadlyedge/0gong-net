@@ -1,11 +1,18 @@
 import { useCartStore } from "../store/use-cart-store"
 
 export const useCart = (tenantSlug: string) => {
-	const getCartByTenant = useCartStore((state) => state.getCartByTenant)
-	const addProduct = useCartStore((state) => state.addProduct)
-	const removeProduct = useCartStore((state) => state.removeProduct)
-	const clearCart = useCartStore((state) => state.clearCart)
-	const clearAllCarts = useCartStore((state) => state.clearAllCarts)
+	// const getCartByTenant = useCartStore((state) => state.getCartByTenant)
+	// const addProduct = useCartStore((state) => state.addProduct)
+	// const removeProduct = useCartStore((state) => state.removeProduct)
+	// const clearCart = useCartStore((state) => state.clearCart)
+	// const clearAllCarts = useCartStore((state) => state.clearAllCarts)
+	const {
+		getCartByTenant,
+		addProduct,
+		removeProduct,
+		clearCart,
+		clearAllCarts,
+	} = useCartStore()
 
 	const productIds = getCartByTenant(tenantSlug)
 
