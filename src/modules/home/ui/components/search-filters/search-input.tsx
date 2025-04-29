@@ -43,7 +43,7 @@ export const SearchInput = ({ disabled }: SearchInputProps) => {
 					asChild
 					variant="elevated"
 					className="">
-					<Link href="/library">
+					<Link prefetch href="/library">
 						<BookmarkCheckIcon />
 						Library
 					</Link>
