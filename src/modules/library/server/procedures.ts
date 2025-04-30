@@ -67,6 +67,7 @@ export const libraryRouter = createTRPCRouter({
 				where: { id: { in: productIds } },
 			})
 
+			// TODO: Fetch all reviews for all products in a single query
 			const dataWithSummarizedReviews = await Promise.all(
 				productsData.docs.map(async (doc) => {
 					const reviewData = await ctx.db.find({
