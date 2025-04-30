@@ -16,6 +16,7 @@ import { Tags } from "./collections/Tags"
 import { Tenants } from "./collections/Tenants"
 import type { Config } from "./payload-types"
 import { Orders } from "./collections/Orders"
+import { Reviews } from "./collections/Reviews"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,7 +29,16 @@ export default buildConfig({
 		},
 	},
 	cookiePrefix: "0gong-net",
-	collections: [Users, Media, Categories, Products, Tags, Tenants, Orders],
+	collections: [
+		Users,
+		Media,
+		Categories,
+		Products,
+		Tags,
+		Tenants,
+		Orders,
+		Reviews,
+	],
 	editor: lexicalEditor(),
 	secret: process.env.PAYLOAD_SECRET || "",
 	typescript: {
