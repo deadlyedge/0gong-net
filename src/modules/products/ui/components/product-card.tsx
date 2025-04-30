@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton"
+import { generateTenantUrl } from "@/lib/utils"
 // import { formatCurrency, generateTenantUrl } from "@/lib/utils"
 import { StarIcon } from "lucide-react"
 import Image from "next/image"
@@ -37,7 +38,7 @@ export const ProductCard = ({
 	// 	router.push(generateTenantUrl(tenantSlug))
 	// }
 	return (
-		<Link href={`/library/${id}`}>
+		<Link href={`${generateTenantUrl(tenantSlug)}/products/${id}`}>
 			<div className="border rounded-md bg-white overflow-hidden h-full flex flex-col hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow">
 				<div className="relative aspect-square">
 					<Image

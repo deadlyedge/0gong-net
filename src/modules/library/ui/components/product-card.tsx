@@ -5,8 +5,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-// add real ratings
-
 type ProductCardProps = {
 	id: string
 	name: string
