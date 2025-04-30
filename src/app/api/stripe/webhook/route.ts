@@ -1,4 +1,4 @@
-import type Stripe from "stripe"
+import type {Stripe} from "stripe"
 import { getPayload } from "payload"
 import config from "@/payload.config"
 import { NextResponse } from "next/server"
@@ -29,16 +29,7 @@ export async function POST(req: Request) {
 
 	const permittedEvents: string[] = [
 		"checkout.session.completed",
-		// "charge.updated",
-		// "invoice.created",
-		// "invoice.finalized",
-		// "invoice.sent",
-		// "invoice.paid",
-		// "invoice.payment_succeeded",
-		// "payment_intent.succeeded",
-		// "payment_intent.created",
-		// "customer.created",
-		// "charge.succeeded",
+		"account.updated",
 	]
 
 	const payload = await getPayload({ config })
@@ -47,54 +38,68 @@ export async function POST(req: Request) {
 		let data: Stripe.Checkout.Session
 
 		try {
-				switch (event.type) {
-					case "checkout.session.completed": {
-						data = event.data.object
+			switch (event.type) {
+				case "checkout.session.completed": {
+					data = event.data.object
 
-						if (!data.metadata?.userId) {
-							throw new Error("No user ID found in metadata")
-						}
-
-						const user = await payload.findByID({
-							collection: "users",
-							id: data.metadata.userId,
-						})
-
-						if (!user) throw new Error("No user found")
-
-						const expandedSession = await stripe.checkout.sessions.retrieve(
-							data.id,
-							{
-								expand: ["line_items.data.price.product"],
-							},
-						)
-
-						if (
-							!expandedSession.line_items?.data ||
-							expandedSession.line_items.data.length === 0
-						) {
-							throw new Error("No line items found")
-						}
-
-						const lineItems = expandedSession.line_items
-							.data as ExpandedLineItem[]
-
-						for (const item of lineItems) {
-							await payload.create({
-								collection: "orders",
-								data: {
-									stripeCheckoutSessionId: data.id,
-									user: user.id,
-									product: item.price.product.metadata.id,
-									name: item.price.product.name,
-								},
-							})
-						}
-						break
+					if (!data.metadata?.userId) {
+						throw new Error("No user ID found in metadata")
 					}
-					default:
-						throw new Error(`Unhandled event: ${event.type}`)
+
+					const user = await payload.findByID({
+						collection: "users",
+						id: data.metadata.userId,
+					})
+
+					if (!user) throw new Error("No user found")
+
+					const expandedSession = await stripe.checkout.sessions.retrieve(
+						data.id,
+						{
+							expand: ["line_items.data.price.product"],
+						},
+					)
+
+					if (
+						!expandedSession.line_items?.data ||
+						expandedSession.line_items.data.length === 0
+					) {
+						throw new Error("No line items found")
+					}
+
+					const lineItems = expandedSession.line_items
+						.data as ExpandedLineItem[]
+
+					for (const item of lineItems) {
+						await payload.create({
+							collection: "orders",
+							data: {
+								stripeCheckoutSessionId: data.id,
+								user: user.id,
+								product: item.price.product.metadata.id,
+								name: item.price.product.name,
+							},
+						})
+					}
+					break
 				}
+				case "account.updated": {
+					const data = event.data.object as Stripe.Account
+
+					await payload.update({
+						collection: "tenants",
+						where: {
+							stripeAccountId: { equals: data.id },
+						},
+						data:{
+							stripeDetailsSubmitted: data.details_submitted,
+						}
+					})
+					break
+				}
+				default:
+					throw new Error(`Unhandled event: ${event.type}`)
+			}
 		} catch (error) {
 			console.error(error)
 			return NextResponse.json(
