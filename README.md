@@ -80,3 +80,15 @@ Contributions are welcome! Please open issues or pull requests for improvements 
 ## License
 
 This project is private and not licensed for public use.
+
+## TODO
+
+- [ ] Implement user profile page
+- [ ] Add product search functionality
+- [ ] Improve error handling and user feedback
+- [ ] Optimize performance for large datasets
+- [ ] Add unit and integration tests
+- [ ] Implement internationalization (i18n) support
+- [ ] Add more detailed documentation and code comments
+- [ ] Find a better way to accept payments
+- [ ] "take fees" need more test

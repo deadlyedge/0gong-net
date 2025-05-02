@@ -40,7 +40,7 @@ export const SearchInput = ({ disabled }: SearchInputProps) => {
 			{/* TODO: Add library button */}
 			{session.data?.user && (
 				<Button asChild variant="elevated" className="">
-					<Link prefetch href="/library">
+					<Link href="/library">
 						<BookmarkCheckIcon />
 						Library
 					</Link>
