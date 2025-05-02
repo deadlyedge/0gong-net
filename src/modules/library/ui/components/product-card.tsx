@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton"
-import { formatCurrency, generateTenantUrl } from "@/lib/utils"
+import { generateTenantUrl } from "@/lib/utils"
 import { StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -19,7 +19,7 @@ type ProductCardProps = {
 export const ProductCard = ({
 	id,
 	name,
-	price,
+	// price,
 	imageUrl,
 	tenantSlug,
 	tenantImageUrl,
@@ -68,11 +68,11 @@ export const ProductCard = ({
 						</div>
 					)}
 				</div>
-				<div className="p-4">
+				{/* <div className="p-4">
 					<div className="relative px-2 py-1 border bg-pink-400 w-fit">
 						<p className="text-sm font-medium">{formatCurrency(price)}</p>
 					</div>
-				</div>
+				</div> */}
 			</div>
 		</Link>
 	)
