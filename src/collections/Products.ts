@@ -1,5 +1,6 @@
 import { isSuperAdmin } from "@/lib/access"
 import type { Tenant } from "@/payload-types"
+import { lexicalEditor, UploadFeature } from "@payloadcms/richtext-lexical"
 import type { CollectionConfig } from "payload"
 
 export const Products: CollectionConfig = {
@@ -12,6 +13,7 @@ export const Products: CollectionConfig = {
 
 			return Boolean(tenant?.stripeDetailsSubmitted)
 		},
+		delete: ({ req }) => isSuperAdmin(req.user),
 	},
 	admin: {
 		useAsTitle: "name",
@@ -24,17 +26,16 @@ export const Products: CollectionConfig = {
 			required: true,
 		},
 		{
+			name: "description",
+			type: "richText",
+		},
+		{
 			name: "price",
 			type: "number",
 			required: true,
 			admin: {
 				description: "Price in USD",
 			},
-		},
-		{
-			name: "description",
-			// change to richText
-			type: "text",
 		},
 		{
 			name: "image",
@@ -66,11 +67,30 @@ export const Products: CollectionConfig = {
 		},
 		{
 			name: "content",
-			// change to richText
-			type: "textarea",
+			type: "richText",
+			editor: lexicalEditor(),
 			admin: {
 				description:
 					"Protected content only visible to customers after purchase. Add product documentation, downloadable files, getting started guides, and bonus materials. Supports Markdown formatting.",
+			},
+		},
+		{
+			name: "isArchived",
+			type: "checkbox",
+			defaultValue: false,
+			label: "Archive",
+			admin: {
+				description: "Archived products will not be visible to customers.",
+			},
+		},
+		{
+			name: "isPrivate",
+			type: "checkbox",
+			defaultValue: false,
+			label: "Private",
+			admin: {
+				description:
+					"If checked, this product will not be visible to customers in the storefront.",
 			},
 		},
 	],
