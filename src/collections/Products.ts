@@ -1,6 +1,6 @@
 import { isSuperAdmin } from "@/lib/access"
 import type { Tenant } from "@/payload-types"
-import { lexicalEditor, UploadFeature } from "@payloadcms/richtext-lexical"
+// import { lexicalEditor, UploadFeature } from "@payloadcms/richtext-lexical"
 import type { CollectionConfig } from "payload"
 
 export const Products: CollectionConfig = {
@@ -68,7 +68,7 @@ export const Products: CollectionConfig = {
 		{
 			name: "content",
 			type: "richText",
-			editor: lexicalEditor(),
+			// editor: lexicalEditor(),
 			admin: {
 				description:
 					"Protected content only visible to customers after purchase. Add product documentation, downloadable files, getting started guides, and bonus materials. Supports Markdown formatting.",
