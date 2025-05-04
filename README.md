@@ -92,3 +92,4 @@ This project is private and not licensed for public use.
 - [ ] Add more detailed documentation and code comments
 - [ ] Find a better way to accept payments
 - [ ] "take fees" need more test
+- [ ] review checkout-view.tsx and checkout-item.tsx

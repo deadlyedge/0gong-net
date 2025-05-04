@@ -186,6 +186,7 @@ export interface Tenant {
  */
 export interface Media {
   id: string;
+  tenant?: (string | null) | Tenant;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -227,11 +228,25 @@ export interface Product {
   id: string;
   tenant?: (string | null) | Tenant;
   name: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * Price in USD
    */
   price: number;
-  description?: string | null;
   image?: (string | null) | Media;
   cover?: (string | null) | Media;
   category?: (string | null) | Category;
@@ -240,7 +255,29 @@ export interface Product {
   /**
    * Protected content only visible to customers after purchase. Add product documentation, downloadable files, getting started guides, and bonus materials. Supports Markdown formatting.
    */
-  content?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Archived products will not be visible to customers.
+   */
+  isArchived?: boolean | null;
+  /**
+   * If checked, this product will not be visible to customers in the storefront.
+   */
+  isPrivate?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -397,6 +434,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
+  tenant?: T;
   alt?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -430,14 +468,16 @@ export interface CategoriesSelect<T extends boolean = true> {
 export interface ProductsSelect<T extends boolean = true> {
   tenant?: T;
   name?: T;
-  price?: T;
   description?: T;
+  price?: T;
   image?: T;
   cover?: T;
   category?: T;
   tags?: T;
   refundPolicy?: T;
   content?: T;
+  isArchived?: T;
+  isPrivate?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -9,6 +9,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { formatCurrency, generateTenantUrl } from "@/lib/utils"
 import { useTRPC } from "@/trpc/client"
 import { toast } from "sonner"
+import { defaultJSXConverters, RichText } from "@payloadcms/richtext-lexical/react"
 
 import { Button } from "@/components/ui/button"
 import { StarRating } from "@/components/star-rating"
@@ -51,12 +52,6 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
 						fill
 						className="object-cover"
 					/>
-					{/* <Image
-						src={data.cover?.url ?? "https://f.zick.xyz/s/AmYuYfCj"}
-						alt={data.name}
-						fill
-						className="object-cover"
-					/> */}
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-6">
 					<div className="col-span-4">
@@ -122,7 +117,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
 
 						<div className="p-6">
 							{data.description ? (
-								<p>{data.description}</p>
+								<RichText data={data.description} converters={defaultJSXConverters} />
 							) : (
 								<p className="font-medium text-muted-foreground italic">
 									No description available
@@ -153,11 +148,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
 											}, 1000)
 										}}
 										disabled={isCopied}>
-										{isCopied ? (
-											<CheckIcon />
-										) : (
-											<LinkIcon />
-										)}
+										{isCopied ? <CheckIcon /> : <LinkIcon />}
 									</Button>
 								</div>
 
@@ -196,6 +187,23 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
 							</div>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
+	)
+}
+
+export const ProductViewSkeleton = () => {
+	return (
+		<div className="px-4 lg:px-12 py-10">
+			<div className="border rounded-sm bg-white overflow-hidden">
+				<div className="relative aspect-[3.9] border-b">
+					<Image
+						src="/placeholder.png"
+						alt="placeholder"
+						fill
+						className="object-cover"
+					/>
 				</div>
 			</div>
 		</div>
