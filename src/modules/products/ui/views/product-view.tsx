@@ -9,7 +9,10 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { formatCurrency, generateTenantUrl } from "@/lib/utils"
 import { useTRPC } from "@/trpc/client"
 import { toast } from "sonner"
-import { defaultJSXConverters, RichText } from "@payloadcms/richtext-lexical/react"
+import {
+	defaultJSXConverters,
+	RichText,
+} from "@payloadcms/richtext-lexical/react"
 
 import { Button } from "@/components/ui/button"
 import { StarRating } from "@/components/star-rating"
@@ -117,7 +120,10 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
 
 						<div className="p-6">
 							{data.description ? (
-								<RichText data={data.description} converters={defaultJSXConverters} />
+								<RichText
+									data={data.description}
+									converters={defaultJSXConverters}
+								/>
 							) : (
 								<p className="font-medium text-muted-foreground italic">
 									No description available

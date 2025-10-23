@@ -2,7 +2,10 @@ import { Suspense } from "react"
 import { getQueryClient, trpc } from "@/trpc/server"
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 
-import { ProductView, ProductViewSkeleton } from "@/modules/products/ui/views/product-view"
+import {
+	ProductView,
+	ProductViewSkeleton,
+} from "@/modules/products/ui/views/product-view"
 
 type PageProps = {
 	params: Promise<{ productId: string; slug: string }>

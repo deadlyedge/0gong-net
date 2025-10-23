@@ -1,4 +1,3 @@
-
 import { Footer } from "@/modules/tenants/ui/components/footer"
 import { Navbar } from "@/modules/checkout/ui/components/navbar"
 
@@ -12,7 +11,7 @@ const Layout = async ({ children, params }: LayoutProps) => {
 
 	return (
 		<div className="min-h-screen flex flex-col bg-[#f4f4f0]">
-					<Navbar slug={slug} />
+			<Navbar slug={slug} />
 			<div className="flex-1">
 				<div className="max-w-(--breakpoing-xl) mx-auto">{children}</div>
 			</div>

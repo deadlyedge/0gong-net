@@ -55,8 +55,7 @@ export const CategoryDropdown = ({
 					)}>
 					<Link
 						// prefetch
-						href={`/${category.slug === "all" ? "" : category.slug}`}
-					>
+						href={`/${category.slug === "all" ? "" : category.slug}`}>
 						{category.name}
 					</Link>
 				</Button>

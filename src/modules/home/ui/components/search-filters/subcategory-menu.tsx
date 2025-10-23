@@ -7,10 +7,7 @@ type SubcategoryMenuProps = {
 	isOpen: boolean
 }
 
-export const SubcategoryMenu = ({
-	category,
-	isOpen,
-}: SubcategoryMenuProps) => {
+export const SubcategoryMenu = ({ category, isOpen }: SubcategoryMenuProps) => {
 	if (!isOpen || !category.subcategories || category.subcategories.length === 0)
 		return null
 

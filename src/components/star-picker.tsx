@@ -19,6 +19,7 @@ export const StarPicker = ({
 	disabled,
 }: StarPickerProps) => {
 	const [hoverValue, setHoverValue] = useState(0)
+
 	return (
 		<div
 			className={cn(
